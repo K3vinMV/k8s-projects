@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'lachlanevenson/k8s-kubectl'
-            args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.kube:/root/.kube:ro'
-        }
-    }
+    agent any
 
     environment {
         IMAGE_NAME = "kevmev/nodejs-sample-app"
@@ -42,7 +37,11 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 dir('node-js-sample') {
-                    sh 'kubectl apply -f k8s/deployment.yaml'
+                    script {
+                        docker.image('lachlanevenson/k8s-kubectl').inside('-v $HOME/.kube:/root/.kube:ro') {
+                            sh 'kubectl apply -f k8s/deployment.yaml'
+                        }
+                    }
                 }
             }
         }
