@@ -39,7 +39,7 @@ pipeline {
             steps {
                 dir('node-js-sample') {
                     // Aquí solo ejecutamos kubectl directamente, sin contenedor docker
-                    sh 'kubectl apply -f k8s/deployment.yaml'
+                    sh 'kubectl apply -f K8s/deployment.yaml'
                 }
             }
         }
