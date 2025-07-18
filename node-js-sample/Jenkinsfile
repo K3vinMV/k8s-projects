@@ -14,17 +14,21 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${IMAGE_NAME}:latest")
+                dir('node-js-sample') {
+                    script {
+                        docker.build("${IMAGE_NAME}:latest")
+                    }
                 }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                withDockerRegistry([credentialsId: 'docker-hub-creds', url: '']) {
-                    script {
-                        docker.image("${IMAGE_NAME}:latest").push()
+                dir('node-js-sample') {
+                    withDockerRegistry([credentialsId: 'docker-hub-creds', url: '']) {
+                        script {
+                            docker.image("${IMAGE_NAME}:latest").push()
+                        }
                     }
                 }
             }
@@ -32,7 +36,9 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f k8s/deployment.yaml'
+                dir('node-js-sample') {
+                    sh 'kubectl apply -f k8s/deployment.yaml'
+                }
             }
         }
     }
