@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-        image 'lachlanevenson/k8s-kubectl' // esta imagen tiene kubectl, pero puede que necesites agregar docker client
-        args '-v /var/run/docker.sock:/var/run/docker.sock' // para docker dentro del contenedor
+            image 'lachlanevenson/k8s-kubectl'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.kube:/root/.kube:ro'
         }
     }
 
