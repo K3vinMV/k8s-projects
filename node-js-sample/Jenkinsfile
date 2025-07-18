@@ -38,7 +38,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 dir('node-js-sample') {
-                    withCredentials([file(credentialsId: 'KUBECONFIG_FILE', variable: 'KUBECONFIG')]) {
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         sh '''
                             mkdir -p $HOME/.kube
                             cp $KUBECONFIG $HOME/.kube/config
