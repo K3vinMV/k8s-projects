@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+        image 'lachlanevenson/k8s-kubectl' // esta imagen tiene kubectl, pero puede que necesites agregar docker client
+        args '-v /var/run/docker.sock:/var/run/docker.sock' // para docker dentro del contenedor
+        }
+    }
 
     environment {
         IMAGE_NAME = "kevmev/nodejs-sample-app"
