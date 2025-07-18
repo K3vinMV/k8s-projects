@@ -38,8 +38,13 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 dir('node-js-sample') {
-                    // Aquí solo ejecutamos kubectl directamente, sin contenedor docker
-                    sh 'kubectl apply -f K8s/deployment.yaml'
+                    withCredentials([file(credentialsId: 'KUBECONFIG_FILE', variable: 'KUBECONFIG')]) {
+                        sh '''
+                            mkdir -p $HOME/.kube
+                            cp $KUBECONFIG $HOME/.kube/config
+                            kubectl apply -f K8s/deployment.yaml
+                        '''
+                    }
                 }
             }
         }
